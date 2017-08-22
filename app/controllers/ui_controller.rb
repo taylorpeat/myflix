@@ -6,5 +6,6 @@ class UiController < ApplicationController
   layout "application"
 
   def index
+    binding.pry
   end
 end
