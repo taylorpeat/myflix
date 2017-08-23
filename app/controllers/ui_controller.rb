@@ -4,8 +4,4 @@ class UiController < ApplicationController
   end
 
   layout "application"
-
-  def index
-    binding.pry
-  end
 end
