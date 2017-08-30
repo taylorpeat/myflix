@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 videos = [
   { title: 'family_guy', rating: 4.5, category_id: 1 },
   { title: 'futurama',   rating: 4.0, category_id: 1 },
@@ -11,12 +13,18 @@ categories = [
   { name: 'reality', title: 'Reality TV' },
 ]
 
+users = [
+  { email: 't@t.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Taylor Peat' }
+]
+
 Video.create(videos) do |video|
   video[:description] = 'Pizza boy Philip J. Fry awakens in the 31st century after 1,000 years of cryogenic preservation in this animated series. After he gets a job at an interplanetary delivery service, Fry embarks on ridiculous escapades to make sense of his predicament.'
   video[:cover_image_url] = '/tmp/' + video[:title] + '.jpg'
 end
 
 Category.create(categories)
+
+User.create(users)
 
 # videos.each do |video|
 #   image_url = '/tmp/' + video[:name] + '.jpg'
