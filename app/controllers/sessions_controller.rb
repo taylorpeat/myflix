@@ -14,4 +14,8 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     redirect_to root_path, notice: "You have signed out."
   end
+
+  def new
+    redirect_to home_path if current_user
+  end
 end

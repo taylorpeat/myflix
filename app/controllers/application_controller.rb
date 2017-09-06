@@ -2,6 +2,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def require_user
-    redirect_to sign_in_path unless current_user
+    redirect_to sign_in_path, notice: "You must be signed in to access that page." unless current_user
   end
+
+  def current_user
+    User.find(session[:user_id]) if session[:user_id]
+  end
+
+  helper_method :current_user
 end
