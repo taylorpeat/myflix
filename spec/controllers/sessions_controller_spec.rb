@@ -21,11 +21,27 @@ describe SessionsController do
       it "creates session for user" do
         expect(session[:user_id]).to eq(@user.id)
       end
-      it "redirects to home"
-      it "sets the notice"
+      it "redirects to home" do
+        expect(response).to redirect_to home_path
+      end
+      it "sets the notice" do
+        expect(flash[:notice]).not_to be_blank
+      end
     end
 
     context "invalid credentials" do
+      before do
+        post :create, email: nil, password: "password"
+      end
+      it "does not create session" do
+        expect(session[:user_id]).to be_nil
+      end
+      it "sets the notice" do
+        expect(flash[:error]).not_to be_blank
+      end
+      it "redirects to the sign in page" do
+        expect(response).to redirect_to sign_in_path
+      end
     end
   end
   describe "POST destroy" do
