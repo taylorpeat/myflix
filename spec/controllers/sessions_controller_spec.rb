@@ -36,7 +36,7 @@ describe SessionsController do
       it "does not create session" do
         expect(session[:user_id]).to be_nil
       end
-      it "sets the notice" do
+      it "sets the error message" do
         expect(flash[:error]).not_to be_blank
       end
       it "redirects to the sign in page" do
@@ -44,6 +44,11 @@ describe SessionsController do
       end
     end
   end
-  describe "POST destroy" do
+  describe "GET destroy" do
+    it "clears the session for the user" do
+      session[:user_id] = Fabricate(:user).id
+      get :destroy
+      expect(session[:user_id]).to be_nil
+    end
   end
 end
