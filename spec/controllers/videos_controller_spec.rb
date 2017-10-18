@@ -2,12 +2,28 @@ require 'spec_helper'
 
 describe VideosController do
   describe "GET show" do
-    it "sets @video for authenticated user" do
-      session[:user_id] = Fabricate(:user).id
-      video = Fabricate(:video)
-      get :show, id: video.id
-      expect(assigns(:video)).to eq(video)
+    context 'authenticated user' do
+      let(:video) { Fabricate(:video) }
+      let(:reviews) do
+        review1 = Fabricate(:review, video: video)
+        review2 = Fabricate(:review, video: video)
+        [review1, review2]
+      end
+
+      before do
+        session[:user_id] = Fabricate(:user).id
+        get :show, id: video.id
+      end
+      
+      it "sets @video" do
+        expect(assigns(:video)).to eq(video)
+      end
+
+      it "sets @reviews" do
+        expect(assigns(:reviews)).to match_array(reviews)
+      end
     end
+
     it "redirects unauthenticated user to the sign in page" do
       video = Fabricate(:video)
       get :show, id: video.id

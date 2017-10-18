@@ -1,5 +1,6 @@
 class Video < ActiveRecord::Base
   belongs_to :category
+  has_many :reviews
 
   validates_presence_of :title, :description
 
@@ -7,5 +8,10 @@ class Video < ActiveRecord::Base
     return [] if search_term.blank?
 
     where("title LIKE ?", "%#{search_term}%").order("created_at ASC")
+  end
+
+  def rating
+    return nil if reviews.empty?
+    (reviews.reduce(0) { |sum, r| r.rating.to_f + sum } / reviews.count).round(1)
   end
 end
