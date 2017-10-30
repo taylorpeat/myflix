@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe ReviewsController do
   describe 'POST create' do
-    context 'authenticated user' do
-      let(:video) { Fabricate(:video) }
-      
+    let(:video) { Fabricate(:video) }
+    context 'authenticated user' do  
       before do
         session[:user_id] = Fabricate(:user).id
       end
@@ -23,6 +22,9 @@ describe ReviewsController do
         it 'refreshes page' do
           expect(response).to redirect_to(video_path(video.id))
         end
+        it 'doesnt display an error message' do
+          expect(flash[:error]).to be_blank
+        end
       end
       context 'invalid input' do
         let(:invalid_review) { { rating: 1, content: '', video_id: video.id } }
@@ -35,13 +37,19 @@ describe ReviewsController do
           expect(Review.count).to eq(0)
         end
         it 'displays error message' do
-          expect(response[:error]).to eq('The review was incomplete. Please resubmit.')
+          expect(flash[:error]).not_to be_blank
         end
         it 'refreshes page' do
+          expect(response).to redirect_to(video_path(video.id))
         end
       end
     end
     context 'unauthenticated user' do
+      let(:review) { Fabricate.attributes_for(:review, video: video) }
+      it "redirects to sign in page if unauthenticated" do
+        post :create, review: review
+        expect(response).to redirect_to sign_in_path
+      end
     end
   end
 end
