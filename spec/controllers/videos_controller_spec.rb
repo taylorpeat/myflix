@@ -22,6 +22,10 @@ describe VideosController do
       it "sets @reviews" do
         expect(assigns(:reviews)).to match_array(reviews)
       end
+
+      it 'displays reviews in reverse chronological order' do
+        expect(assigns(:reviews)).to eq(reviews.reverse)
+      end
     end
 
     it "redirects unauthenticated user to the sign in page" do

@@ -10,8 +10,8 @@ describe ReviewsController do
       
       context 'valid input' do
         let(:review) { Fabricate.attributes_for(:review, video: video) }
-        before do
-          post :create, review: review
+        before do |b|
+          post :create, review: review, video_id: video.id unless b.metadata[:skip_before]
         end
         it 'creates new review' do
           expect(Review.count).to eq(1)
@@ -30,7 +30,7 @@ describe ReviewsController do
         let(:invalid_review) { { rating: 1, content: '', video_id: video.id } }
         
         before do
-          post :create, review: invalid_review
+          post :create, review: invalid_review, video_id: video.id
         end
 
         it "doesn't create review" do
@@ -47,7 +47,7 @@ describe ReviewsController do
     context 'unauthenticated user' do
       let(:review) { Fabricate.attributes_for(:review, video: video) }
       it "redirects to sign in page if unauthenticated" do
-        post :create, review: review
+        post :create, review: review, video_id: video.id
         expect(response).to redirect_to sign_in_path
       end
     end
