@@ -7,8 +7,8 @@ describe QueueItemsController do
     let(:user) { Fabricate(:user) }
 
     let(:queue_items) do
-      queue_item1 = Fabricate(:queue_item, video_id: video1.id, user_id: user.id )
-      queue_item2 = Fabricate(:queue_item, video_id: video2.id), user_id: user.id )
+      queue_item1 = Fabricate(:queue_item, video_id: video1, user_id: user )
+      queue_item2 = Fabricate(:queue_item, video_id: video2, user_id: user )
     end
 
     context "With authenticated user" do
