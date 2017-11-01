@@ -25,7 +25,7 @@
                 %td
                   = select :rating, nil, options_for_select([5,4,3,2,1].map { |num| [pluralize(num, 'Star'), num] }, queue_item.rating), class: 'form-group'
                 %td
-                  = link_to queue_item.video.category.name, queue_item.video.category
+                  = link_to queue_item.video.category.name.titleize, queue_item.video.category
                 %td
                   = link_to "", method: :post do
                     %i.glyphicon.glyphicon-remove
