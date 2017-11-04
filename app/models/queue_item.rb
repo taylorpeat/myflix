@@ -2,6 +2,8 @@ class QueueItem < ActiveRecord::Base
   belongs_to :video
   belongs_to :user
 
+  validates_presence_of :user_id, :video_id
+
   def rating
     review = user.reviews.where({ video_id: video.id }).first
     review.rating if review
