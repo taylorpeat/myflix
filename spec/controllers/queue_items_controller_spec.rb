@@ -53,6 +53,12 @@ describe QueueItemsController do
           expect(QueueItem.first.user).to eq(user)
         end
 
+        it "assigns new queue item last queue position" do
+          video2 = Fabricate(:video)
+          post :create, video_id: video2.id
+          expect(QueueItem.last.position).to eq(2)
+        end
+
         it "redirects to my queue" do
           expect(response).to redirect_to my_queue_path
         end

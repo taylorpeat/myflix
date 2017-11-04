@@ -8,6 +8,8 @@ class QueueItemsController < ApplicationController
 
   def create
     queue_item = QueueItem.new({ user: current_user, video_id: params[:video_id] })
+    queue_item.position = QueueItem.next_position
+
     if queue_item.save
       redirect_to my_queue_path
     else
