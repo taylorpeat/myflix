@@ -14,7 +14,4 @@ class QueueItem < ActiveRecord::Base
     video.title.titleize
   end
 
-  # def self.next_position
-  #   user.queue_items.count + 1
-  # end
 end

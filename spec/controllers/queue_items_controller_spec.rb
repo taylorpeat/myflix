@@ -34,9 +34,10 @@ describe QueueItemsController do
 
   describe 'POST create' do
     context "With authenticated user" do
-    before do
-      session[:user_id] = user.id
-    end
+      before do
+        session[:user_id] = user.id
+      end
+
       context "With valid attributes" do      
         before do
           post :create, video_id: video1.id
@@ -93,6 +94,51 @@ describe QueueItemsController do
     context "With unauthenticated user" do
       it "redirects to sign in page" do
         post :create
+        expect(response).to redirect_to sign_in_path
+      end
+    end
+  end
+
+  describe "DELETE destroy" do
+    let(:video2) { Fabricate(:video) }
+    let!(:queue_item1) { Fabricate(:queue_item, video: video1, user: user, position: user.queue_items.count + 1) }
+    let!(:queue_item2) { Fabricate(:queue_item, video: video2, user: user, position: user.queue_items.count + 1) }
+
+    context "With authenticated user" do
+      before do
+        session[:user_id] = user.id
+      end
+
+      it "removes queue item" do
+        delete :destroy, id: queue_item1.id
+        expect(QueueItem.count).to eq(1)
+      end
+      
+      it "doesn't remove queue item unless it belongs to current user", skip_before: true do
+        user2 = Fabricate(:user)
+        session[:user_id] = user2.id
+        delete :destroy, id: queue_item1.id
+        expect(QueueItem.count).to eq(2)
+      end
+      
+      it "updates positions of remaining queue items" do
+        delete :destroy, id: queue_item1.id
+        expect(queue_item2.reload.position).to eq(1) 
+      end
+
+      it "displays notice item is removed" do
+        delete :destroy, id: queue_item1.id
+        expect(flash[:notice]).not_to be_nil
+      end
+      it "redirects to my queue page" do
+        delete :destroy, id: queue_item1.id
+        expect(response).to redirect_to my_queue_path
+      end
+    end
+
+    context "With unauthenticated user" do
+      it "redirects to sign in page" do
+        delete :destroy, id: queue_item1.id
         expect(response).to redirect_to sign_in_path
       end
     end

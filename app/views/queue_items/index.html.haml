@@ -23,10 +23,10 @@
                 %td
                   = button_to "Play", nil, class: "btn btn-default"
                 %td
-                  = select :rating, nil, options_for_select([5,4,3,2,1].map { |num| [pluralize(num, 'Star'), num] }.concat(['']), selected: =queue_item.rating || '', disabled: ''), class: 'form-group'
+                  = select :rating, nil, options_for_select([5,4,3,2,1].map { |num| [pluralize(num, 'Star'), num] }.concat(['']), selected: queue_item.rating || '', disabled: ''), class: 'form-group'
                 %td
                   = link_to queue_item.video.category.name.titleize, queue_item.video.category
                 %td
-                  = link_to "", method: :post do
+                  = link_to queue_item, method: :delete do
                     %i.glyphicon.glyphicon-remove
         = button_to "Update Instant Queue", nil, class: "btn btn-default"
