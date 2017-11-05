@@ -7,14 +7,21 @@ class QueueItemsController < ApplicationController
   end
 
   def create
-    queue_item = QueueItem.new({ user: current_user, video_id: params[:video_id] })
-    queue_item.position = QueueItem.next_position
-
-    if queue_item.save
+    if new_queue_item(params).save
       redirect_to my_queue_path
     else
       flash[:error] = "New queue item could not be created."
       redirect_to my_queue_path
     end
   end
+
+  private
+    
+    def new_queue_item(params)
+      QueueItem.new({ user: current_user, video_id: params[:video_id], position: new_queue_item_position })
+    end
+
+    def new_queue_item_position
+      current_user.queue_items.count + 1
+    end
 end
