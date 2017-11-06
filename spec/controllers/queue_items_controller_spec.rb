@@ -143,4 +143,28 @@ describe QueueItemsController do
       end
     end
   end
+
+  describe "PUT update" do
+    let(:video2) { Fabricate(:video) }
+    let!(:queue_item1) { Fabricate(:queue_item, video: video1, user: user, position: user.queue_items.count + 1) }
+    let!(:queue_item2) { Fabricate(:queue_item, video: video2, user: user, position: user.queue_items.count + 1) }
+
+    context "With authenticated user" do
+      before do
+        session[:user_id] = user.id
+      end
+      
+      it "updates position of queue item" do
+
+      end
+      it "updates other queue item positions"
+    end
+
+    # context "With unauthenticated user" do
+    #   it "redirects to sign in page" do
+    #     put :update, id: queue_item1.id
+    #     expect(response).to redirect_to sign_in_path
+    #   end
+    # end
+  end
 end

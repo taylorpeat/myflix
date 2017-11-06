@@ -4,29 +4,30 @@
       %article
         %header
           %h2 My Queue
-        %table.table
-          %thead
-            %tr
-              %th(width="10%") List Order
-              %th(width="30%") Video Title
-              %th(width="10%") Play
-              %th(width="20%") Rating
-              %th(width="15%") Genre
-              %th(width="15%") Remove
-          %tbody
-            - @queue_items.each do |queue_item|
+        = form_tag({controller: "queue_items", action: "update"}, method: "put") do
+          %table.table
+            %thead
               %tr
-                %td
-                  = text_field :position, nil, value: queue_item.position, class: "form-control"
-                %td
-                  = link_to queue_item.video_title, video_path(queue_item.video.id)
-                %td
-                  = button_to "Play", nil, class: "btn btn-default"
-                %td
-                  = select :rating, nil, options_for_select([5,4,3,2,1].map { |num| [pluralize(num, 'Star'), num] }.concat(['']), selected: queue_item.rating || '', disabled: ''), class: 'form-group'
-                %td
-                  = link_to queue_item.video.category.name.titleize, queue_item.video.category
-                %td
-                  = link_to queue_item, method: :delete do
-                    %i.glyphicon.glyphicon-remove
-        = button_to "Update Instant Queue", nil, class: "btn btn-default"
+                %th(width="10%") List Order
+                %th(width="30%") Video Title
+                %th(width="10%") Play
+                %th(width="20%") Rating
+                %th(width="15%") Genre
+                %th(width="15%") Remove
+            %tbody
+              - @queue_items.each do |queue_item|
+                %tr
+                  %td
+                    = text_field queue_item.id, :position, value: queue_item.position, class: "form-control"
+                  %td
+                    = link_to queue_item.video_title, video_path(queue_item.video.id)
+                  %td
+                    = button_to "Play", nil, class: "btn btn-default"
+                  %td
+                    = select queue_item.id, :rating, options_for_select([5,4,3,2,1].map { |num| [pluralize(num, 'Star'), num] }.concat(['']), selected: queue_item.rating || '', disabled: ''), class: 'form-group'
+                  %td
+                    = link_to queue_item.video.category.name.titleize, queue_item.video.category
+                  %td
+                    = link_to queue_item, method: :delete do
+                      %i.glyphicon.glyphicon-remove
+          = submit_tag "Update Instant Queue", class: "btn btn-default"

@@ -17,7 +17,7 @@ class QueueItemsController < ApplicationController
 
   def destroy
     queue_item = QueueItem.find(params[:id])
-    
+
     if current_user.id == queue_item.user_id
       flash[:notice] = "#{queue_item.video_title} has been removed from the queue."
       queue_item.destroy
@@ -26,6 +26,11 @@ class QueueItemsController < ApplicationController
       flash[:error] = "Queue Item could not be destroyed"
     end
 
+    redirect_to my_queue_path
+  end
+
+  def update
+    binding.pry
     redirect_to my_queue_path
   end
 

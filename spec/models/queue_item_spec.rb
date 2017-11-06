@@ -6,8 +6,9 @@ describe QueueItem do
 
   describe "#video_title" do
     it "returns the title of the associated video" do
+      user = Fabricate(:user)
       video = Fabricate(:video)
-      queue_item = Fabricate(:queue_item, video: video)
+      queue_item = Fabricate(:queue_item, video: video, user: user)
       expect(queue_item.video_title).to eq(video.title.titleize)
     end
   end
