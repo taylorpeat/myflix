@@ -15,4 +15,27 @@ class QueueItem < ActiveRecord::Base
     video.title.titleize
   end
 
+  def self.create_queue_item_from_params(params, current_user)
+    QueueItem.new({ user: current_user, video_id: params[:video_id], position: next_queue_item_position(current_user) })
+  end
+
+  def self.update_attributes_from_params(params, current_user)
+    ActiveRecord::Base.transaction do
+      queue_item_params = params[:queue_items]
+      
+      queue_item_params.each do |queue_item_attributes|
+        queue_item = QueueItem.find(queue_item_attributes["id"])
+        if queue_item.user == current_user
+          queue_item.update!({ position: queue_item_attributes["position"] })
+        end
+      end
+    end
+  end
+
+  private 
+
+    def self.next_queue_item_position(current_user)
+      current_user.queue_items.count + 1
+    end
+
 end
