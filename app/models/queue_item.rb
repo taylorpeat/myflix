@@ -3,7 +3,8 @@ class QueueItem < ActiveRecord::Base
   belongs_to :user
 
   validates_presence_of :user_id, :video_id
-  validates_uniqueness_of :position, :video_id
+  validates_uniqueness_of :video_id
+  validates_numericality_of :position, {only_integer: true}
 
   def rating
     review = user.reviews.where({ video_id: video.id }).first

@@ -21,7 +21,7 @@ class QueueItemsController < ApplicationController
     if current_user.id == queue_item.user_id
       flash[:notice] = "#{queue_item.video_title} has been removed from the queue."
       queue_item.destroy
-      current_user.update_queue_positions
+      current_user.normalize_queue_positions
     else
       flash[:error] = "Queue Item could not be destroyed"
     end
@@ -30,7 +30,13 @@ class QueueItemsController < ApplicationController
   end
 
   def update
-    binding.pry
+    begin
+      update_queue_item_attributes
+      current_user.normalize_queue_positions
+    rescue
+      flash[:error] = "The position could not be updated."
+    end
+
     redirect_to my_queue_path
   end
 
@@ -42,5 +48,18 @@ class QueueItemsController < ApplicationController
 
     def new_queue_item_position
       current_user.queue_items.count + 1
+    end
+
+    def update_queue_item_attributes
+      ActiveRecord::Base.transaction do
+        queue_item_params = params[:queue_items]
+        
+        queue_item_params.each do |queue_item_attributes|
+          queue_item = QueueItem.find(queue_item_attributes["id"])
+          if queue_item.user == current_user
+            queue_item.update!({ position: queue_item_attributes["position"] })
+          end
+        end
+      end
     end
 end

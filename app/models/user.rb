@@ -7,13 +7,10 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true, presence: true
   validates :full_name, presence: true
 
-  def update_queue_positions
-    position = 1
-    
-    queue_items.each do |q_item|
-      q_item.position = position
+  def normalize_queue_positions
+    queue_items.each_with_index do |q_item, idx|
+      q_item.position = idx + 1
       q_item.save
-      position += 1
     end
   end
 
