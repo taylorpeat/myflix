@@ -7,7 +7,7 @@ class QueueItemsController < ApplicationController
   end
 
   def create
-    if QueueItem.create_queue_item_from_params(params, current_user).save
+    if create_queue_item.save
       redirect_to my_queue_path
     else
       flash[:error] = "New queue item could not be created."
@@ -31,7 +31,7 @@ class QueueItemsController < ApplicationController
 
   def update
     begin
-      QueueItem.update_attributes_from_params(params, current_user)
+      update_queue_item_attributes
       current_user.normalize_queue_positions
     rescue
       flash[:error] = "The position could not be updated."
@@ -39,4 +39,26 @@ class QueueItemsController < ApplicationController
 
     redirect_to my_queue_path
   end
+
+  private
+
+  def update_queue_item_attributes
+    ActiveRecord::Base.transaction do
+      queue_item_params = params[:queue_items]
+      queue_item_params.each { |qi| update_individual_queue_item(qi) }
+    end
+  end
+
+  def update_individual_queue_item(queue_item_attributes)
+    queue_item = QueueItem.find(queue_item_attributes["id"])
+    
+    if queue_item.user == current_user
+      queue_item.update!({ position: queue_item_attributes["position"] })
+    end
+  end
+
+  def create_queue_item
+    QueueItem.new({ user: current_user, video_id: params[:video_id], position: current_user.next_queue_item_position })
+  end
+
 end
