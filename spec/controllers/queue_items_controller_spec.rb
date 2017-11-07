@@ -155,8 +155,9 @@ describe QueueItemsController do
       end
       
       it "updates position of queue item" do
-
+        put :update 
       end
+
       it "updates other queue item positions"
     end
 
