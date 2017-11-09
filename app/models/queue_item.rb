@@ -7,7 +7,7 @@ class QueueItem < ActiveRecord::Base
   validates_numericality_of :position, {only_integer: true}
 
   def rating
-    review = user.reviews.where({ video_id: video.id }).first
+    review = user.reviews.find_by({ video: video })
     review.rating if review
   end
 
@@ -15,27 +15,14 @@ class QueueItem < ActiveRecord::Base
     video.title.titleize
   end
 
-  def self.create_queue_item_from_params(params, current_user)
-    QueueItem.new({ user: current_user, video_id: params[:video_id], position: next_queue_item_position(current_user) })
+  def update_position(position)
+    queue_item.update!({ position: position })
   end
 
-  def self.update_attributes_from_params(params, current_user)
-    ActiveRecord::Base.transaction do
-      queue_item_params = params[:queue_items]
-      
-      queue_item_params.each do |queue_item_attributes|
-        queue_item = QueueItem.find(queue_item_attributes["id"])
-        if queue_item.user == current_user
-          queue_item.update!({ position: queue_item_attributes["position"] })
-        end
-      end
-    end
+  def update_review_rating(rating)
+    binding.pry
+    review = user.reviews.find_by({ video: video })
+    review.update!({ rating: rating }) if review.rating != rating
   end
-
-  private 
-
-    def self.next_queue_item_position(current_user)
-      current_user.queue_items.count + 1
-    end
 
 end

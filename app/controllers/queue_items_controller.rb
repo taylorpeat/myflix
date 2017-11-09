@@ -42,23 +42,23 @@ class QueueItemsController < ApplicationController
 
   private
 
-  def update_queue_item_attributes
-    ActiveRecord::Base.transaction do
-      queue_item_params = params[:queue_items]
-      queue_item_params.each { |qi| update_individual_queue_item(qi) }
+    def create_queue_item
+      QueueItem.new({ user: current_user, video_id: params[:video_id], position: current_user.next_queue_item_position })
     end
-  end
 
-  def update_individual_queue_item(queue_item_attributes)
-    queue_item = QueueItem.find(queue_item_attributes["id"])
-    
-    if queue_item.user == current_user
-      queue_item.update!({ position: queue_item_attributes["position"] })
+    def update_queue_item_attributes
+      ActiveRecord::Base.transaction do
+        queue_item_params = params[:queue_items]
+        queue_item_params.each { |qi| update_individual_queue_item(qi) }
+      end
     end
-  end
 
-  def create_queue_item
-    QueueItem.new({ user: current_user, video_id: params[:video_id], position: current_user.next_queue_item_position })
-  end
+    def update_individual_queue_item(queue_item_attributes)
+      queue_item = QueueItem.find(queue_item_attributes["id"])
+      if queue_item.user == current_user
+        queue_item.update_position(queue_item_attributes["position"])
+        queue_item.update_review_rating(queue_item_attributes["rating"]) if queue_item_attributes
+      end
+    end
 
 end

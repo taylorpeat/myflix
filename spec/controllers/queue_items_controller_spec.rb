@@ -194,6 +194,18 @@ describe QueueItemsController do
 
         expect(flash[:error]).not_to be_nil
       end
+
+      it "updates review rating" do
+        review1 = Fabricate(:review, video: video1, user: user, rating: "5")
+
+        post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: "1" },
+                                    { id: queue_item2.id, position: "2", rating: queue_item2.rating }]
+        
+        expect(review1.reload.rating).to eq(1)
+      end
+      
+      it "creates new review if user does not have one"
+      it "doesn't create new review if user does have one"
     end
 
     context "With unauthenticated user" do

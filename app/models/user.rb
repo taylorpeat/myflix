@@ -13,10 +13,6 @@ class User < ActiveRecord::Base
       q_item.save
     end
   end
-
-  def create_queue_item_from_params(params, current_user)
-    QueueItem.new({ user: current_user, video_id: params[:video_id], position: next_queue_item_position(current_user) })
-  end
   
   def next_queue_item_position
     queue_items.count + 1
