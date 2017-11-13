@@ -1,5 +1,5 @@
 %article.video
-  .container
+  .containerr
     .row
       .video_large_cover.col-sm-7.col-sm-offset-1
         %img(src="http://dummyimage.com/665x375/000000/00a2ff")
@@ -25,7 +25,7 @@
             %label Rate this video
             .row
               .col-sm-3
-                = f.select :rating, options_for_select([5,4,3,2,1].map { |num| [pluralize(num, 'Star'), num] }), class: 'form-control'
+                = f.select :rating, options_for_video_reviews, class: 'form-control'
           .form-group
             %label Write Review
             .row

@@ -7,22 +7,19 @@ class QueueItem < ActiveRecord::Base
   validates_numericality_of :position, {only_integer: true}
 
   def rating
-    review = user.reviews.find_by({ video: video })
     review.rating if review
+  end
+
+  def rating=(new_rating)
+    review.rating = new_rating
+  end
+
+  def review
+    user.reviews.find_by({ video: video })
   end
 
   def video_title
     video.title.titleize
-  end
-
-  def update_position(position)
-    queue_item.update!({ position: position })
-  end
-
-  def update_review_rating(rating)
-    binding.pry
-    review = user.reviews.find_by({ video: video })
-    review.update!({ rating: rating }) if review.rating != rating
   end
 
 end
