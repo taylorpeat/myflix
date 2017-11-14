@@ -11,10 +11,19 @@ class QueueItem < ActiveRecord::Base
   end
 
   def rating=(new_rating)
-    review.rating = new_rating
+    if review
+      review.rating = new_rating
+    else
+      self.review = Review.new({ rating: new_rating, video: video, user: user, content: 'a' })
+    end
+    review.save
   end
 
   def review
+    @review ||= user.reviews.find_by({ video: video })
+  end
+
+  def review=(new_review)
     user.reviews.find_by({ video: video })
   end
 

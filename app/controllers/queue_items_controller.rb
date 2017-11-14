@@ -48,15 +48,14 @@ class QueueItemsController < ApplicationController
 
     def update_queue_item_attributes
       ActiveRecord::Base.transaction do
-        queue_item_params = params[:queue_items]
-        queue_item_params.each { |qi| update_individual_queue_item(qi) }
+        params[:queue_items].each { |qi| update_individual_queue_item(qi) }
       end
     end
 
     def update_individual_queue_item(queue_item_attributes)
       queue_item = QueueItem.find(queue_item_attributes["id"])
       if queue_item.user == current_user
-        binding.pry
+        # binding.pry
         queue_item.update!({ position: queue_item_attributes["position"], rating: queue_item_attributes["rating"] })
       end
     end
