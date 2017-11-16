@@ -54,8 +54,7 @@ describe QueueItem do
       video = Fabricate(:video)
       review = Fabricate(:review, video: video, user: user, rating: 4)
       queue_item = Fabricate(:queue_item, video: video, user: user)
-      queue_item.rating = 'a'
-      expect(queue_item.rating).to eq(4)
+      expect { queue_item.rating = 'a' }.to raise_error
     end
   end
 end

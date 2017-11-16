@@ -13,9 +13,9 @@ class QueueItem < ActiveRecord::Base
   def rating=(new_rating)
     if review
       review.rating = new_rating
-      review.save
+      false unless review.save
     else
-      new_review = Review.create!({ rating: new_rating, video: video, user: user, content: 'a' })
+      false unless Review.create({ rating: new_rating, video: video, user: user, content: 'a' })
     end
   end
 
