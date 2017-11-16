@@ -55,7 +55,6 @@ class QueueItemsController < ApplicationController
     def update_individual_queue_item(queue_item_attributes)
       queue_item = QueueItem.find(queue_item_attributes["id"])
       if queue_item.user == current_user
-        # binding.pry
         queue_item.update!({ position: queue_item_attributes["position"], rating: queue_item_attributes["rating"] })
       end
     end

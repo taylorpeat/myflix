@@ -4,7 +4,7 @@ class QueueItem < ActiveRecord::Base
 
   validates_presence_of :user_id, :video_id
   validates_uniqueness_of :video_id
-  validates_numericality_of :position, {only_integer: true}
+  validates_numericality_of :position
 
   def rating
     review.rating if review
@@ -13,18 +13,14 @@ class QueueItem < ActiveRecord::Base
   def rating=(new_rating)
     if review
       review.rating = new_rating
+      review.save
     else
-      self.review = Review.new({ rating: new_rating, video: video, user: user, content: 'a' })
+      new_review = Review.create!({ rating: new_rating, video: video, user: user, content: 'a' })
     end
-    review.save
   end
 
   def review
     @review ||= user.reviews.find_by({ video: video })
-  end
-
-  def review=(new_review)
-    user.reviews.find_by({ video: video })
   end
 
   def video_title
