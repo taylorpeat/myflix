@@ -12,10 +12,11 @@ class QueueItem < ActiveRecord::Base
 
   def rating=(new_rating)
     if review
-      review.rating = new_rating
-      false unless review.save
+      review.update_attributes(rating: new_rating)
     else
-      false unless Review.create({ rating: new_rating, video: video, user: user, content: 'a' })
+      new_review = Review.new(rating: new_rating, video: video, user: user)
+      new_review.skip_content_validation = true
+      new_review.save
     end
   end
 

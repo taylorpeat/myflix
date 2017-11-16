@@ -54,7 +54,9 @@ describe QueueItem do
       video = Fabricate(:video)
       review = Fabricate(:review, video: video, user: user, rating: 4)
       queue_item = Fabricate(:queue_item, video: video, user: user)
-      expect { queue_item.rating = 'a' }.to raise_error
+      expect(queue_item.review.reload.rating).to eq(4)
     end
+
+    it "clears the rating if new rating is nil"
   end
 end
