@@ -5,6 +5,5 @@ class Review < ActiveRecord::Base
   attr_accessor :skip_content_validation
 
   validates_presence_of :content, unless: :skip_content_validation
-  validates_presence_of :rating
-  validates_numericality_of :rating, greater_than: 0, less_than_or_equal_to: 5, only_integer: true
+  validates :rating, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 5 }, allow_nil: true
 end

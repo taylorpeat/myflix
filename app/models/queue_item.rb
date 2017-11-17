@@ -14,6 +14,7 @@ class QueueItem < ActiveRecord::Base
     if review
       review.update_attributes(rating: new_rating)
     else
+      return false unless new_rating
       new_review = Review.new(rating: new_rating, video: video, user: user)
       new_review.skip_content_validation = true
       new_review.save
