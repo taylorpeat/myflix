@@ -164,16 +164,16 @@ describe QueueItemsController do
       end
       
       it "updates position of queue item" do
-        post :update, queue_items: [{ id: queue_item1.id, position: "2", rating: queue_item1.rating },
-                                    { id: queue_item2.id, position: "1", rating: queue_item2.rating }]
+        post :update, queue_items: [{ id: queue_item1.id, position: "2", rating: "" },
+                                    { id: queue_item2.id, position: "1", rating: "" }]
         
         expect(queue_item1.reload.position).to eq(2)
         expect(queue_item2.reload.position).to eq(1)
       end
 
       it "updates other queue item positions" do
-        post :update, queue_items: [{ id: queue_item1.id, position: "3", rating: queue_item1.rating },
-                                    { id: queue_item2.id, position: "2", rating: queue_item2.rating }]
+        post :update, queue_items: [{ id: queue_item1.id, position: "3", rating: "" },
+                                    { id: queue_item2.id, position: "2", rating: "" }]
 
         expect(queue_item1.reload.position).to eq(2)
         expect(queue_item2.reload.position).to eq(1)
@@ -184,16 +184,16 @@ describe QueueItemsController do
         video3 = Fabricate(:video)
         queue_item3 = Fabricate(:queue_item, video: video3, user: user2, position: "3")
 
-        post :update, queue_items: [{ id: queue_item1.id, position: "3" },
-                                    { id: queue_item2.id, position: "2" },
-                                    { id: queue_item3.id, position: "1" }]
+        post :update, queue_items: [{ id: queue_item1.id, position: "3", rating: "" },
+                                    { id: queue_item2.id, position: "2", rating: "" },
+                                    { id: queue_item3.id, position: "1", rating: "" }]
         
         expect(queue_item3.reload.position).to eq(3)
       end
 
       it "displays error message when transaction fails" do
-        post :update, queue_items: [{ id: queue_item1.id, position: "3" },
-                                    { id: queue_item2.id, position: "D" }]
+        post :update, queue_items: [{ id: queue_item1.id, position: "3", rating: "" },
+                                    { id: queue_item2.id, position: "D", rating: "" }]
 
         expect(flash[:error]).not_to be_nil
       end
@@ -202,33 +202,52 @@ describe QueueItemsController do
         review1 = Fabricate(:review, video: video1, user: user, rating: "5")
 
         post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: "1" },
-                                    { id: queue_item2.id, position: "2", rating: nil }]
+                                    { id: queue_item2.id, position: "2", rating: "" }]
         
         expect(review1.reload.rating).to eq(1)
       end
       
       it "creates new review if user does not have one" do
         post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: "1" },
-                                    { id: queue_item2.id, position: "2", rating: nil }]
+                                    { id: queue_item2.id, position: "2", rating: "" }]
         
         expect(user.reviews.first.rating).to eq(1)
-        expect(user.reviews.last.rating).to eq(queue_item2.rating)
       end
+
       it "doesn't create a new review if rating is nil" do
-        post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: nil },
-                                    { id: queue_item2.id, position: "2", rating: nil }]
+        post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: "" },
+                                    { id: queue_item2.id, position: "2", rating: "" }]
         
         expect(user.reviews.count).to eq(0)
       end
-      # it "doesn't create new review if user does have one" do
-      #   review1 = Fabricate(:review, video: video1, user: user, rating: "5")
-      #   expect(user.reviews.count).to eq(1)
 
-      #   post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: "1" },
-      #                               { id: queue_item2.id, position: "2", rating: nil }]
+      it "doesn't create new review if user does have one" do
+        review1 = Fabricate(:review, video: video1, user: user, rating: "5")
+        expect(user.reviews.count).to eq(1)
+
+        post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: "1" },
+                                    { id: queue_item2.id, position: "2", rating: nil }]
         
-      #   expect(user.reviews.count).to eq(2)
-      # end
+        expect(user.reviews.count).to eq(1)
+      end
+
+      it "updates existing nil rating to new value" do
+        review1 = Fabricate(:review, video: video1, user: user, rating: nil)
+
+        post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: "1" },
+                                    { id: queue_item2.id, position: "2", rating: nil }]
+
+        expect(review1.reload.rating).to eq(1)
+      end
+
+      it "doesn't accept updating a rating over 5" do
+        review1 = Fabricate(:review, video: video1, user: user, rating: 4)
+
+        post :update, queue_items: [{ id: queue_item1.id, position: "1", rating: "6" },
+                                    { id: queue_item2.id, position: "2", rating: nil }]
+
+        expect(review1.reload.rating).to eq (4)
+      end
     end
 
     context "With unauthenticated user" do
