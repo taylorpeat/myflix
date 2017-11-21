@@ -6,7 +6,6 @@ describe QueueItemsController do
   describe "GET index" do
     let(:video1) { Fabricate(:video) }
     let(:video2) { Fabricate(:video) }
-
     let(:queue_items) do
       queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: user.queue_items.count + 1 )
       queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: user.queue_items.count + 1 )
@@ -15,7 +14,7 @@ describe QueueItemsController do
 
     context "With authenticated user" do
       before do
-        session[:user_id] = user.id
+        set_current_user(user)
         get :index
       end
 
@@ -24,11 +23,8 @@ describe QueueItemsController do
       end
     end
 
-    context "With unauthenticated user" do
-      it "redirects to sign in page" do
-        get :index
-        expect(response).to redirect_to sign_in_path
-      end
+    it_behaves_like "require_sign_in" do
+      let(:action) { get :index }
     end
   end
 
@@ -36,7 +32,7 @@ describe QueueItemsController do
     context "With authenticated user" do
       let(:video1) { Fabricate(:video) }
       before do
-        session[:user_id] = user.id
+        set_current_user(user)
       end
 
       context "With valid attributes" do      
@@ -92,11 +88,8 @@ describe QueueItemsController do
       end
     end
 
-    context "With unauthenticated user" do
-      it "redirects to sign in page" do
-        post :create
-        expect(response).to redirect_to sign_in_path
-      end
+    it_behaves_like "require_sign_in" do
+      let(:action) { post :create }
     end
   end
 
@@ -108,7 +101,7 @@ describe QueueItemsController do
 
     context "With authenticated user" do
       before do
-        session[:user_id] = user.id
+        set_current_user(user)
       end
 
       it "removes queue item" do
@@ -118,7 +111,7 @@ describe QueueItemsController do
       
       it "doesn't remove queue item unless it belongs to current user", skip_before: true do
         user2 = Fabricate(:user)
-        session[:user_id] = user2.id
+        set_current_user(user2)
         delete :destroy, id: queue_item1.id
         expect(QueueItem.count).to eq(2)
       end
@@ -144,11 +137,8 @@ describe QueueItemsController do
       end
     end
 
-    context "With unauthenticated user" do
-      it "redirects to sign in page" do
-        delete :destroy, id: queue_item1.id
-        expect(response).to redirect_to sign_in_path
-      end
+    it_behaves_like "require_sign_in" do
+      let(:action) { delete :destroy, id: queue_item1.id }
     end
   end
 
@@ -160,7 +150,7 @@ describe QueueItemsController do
 
     context "With authenticated user" do
       before do
-        session[:user_id] = user.id
+        set_current_user(user)
       end
       
       it "updates position of queue item" do
@@ -250,12 +240,10 @@ describe QueueItemsController do
       end
     end
 
-    context "With unauthenticated user" do
-      it "redirects to sign in page" do
+    it_behaves_like "require_sign_in" do
+      let(:action) do
         post :update, queue_items: [{ id: queue_item1.id, position: "3", rating: queue_item1.rating },
                                     { id: queue_item2.id, position: "2", rating: queue_item2.rating }]
-        
-        expect(response).to redirect_to sign_in_path
       end
     end
   end
