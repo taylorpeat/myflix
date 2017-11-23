@@ -31,4 +31,7 @@ class QueueItem < ActiveRecord::Base
     video.title.titleize
   end
 
+  def category_name
+    video.try(:category).try(:name).try(:titleize)
+  end
 end

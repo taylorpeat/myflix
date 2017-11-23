@@ -18,4 +18,7 @@ class User < ActiveRecord::Base
     queue_items.count + 1
   end
 
+  def queued_video?(video)
+    !!queue_items.find_by(video_id: video.id)
+  end
 end
