@@ -4,15 +4,15 @@ describe QueueItemsController do
   let(:user) { Fabricate(:user) }
 
   describe "GET index" do
-    let(:video1) { Fabricate(:video) }
-    let(:video2) { Fabricate(:video) }
-    let(:queue_items) do
-      queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: user.queue_items.count + 1 )
-      queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: user.queue_items.count + 1 )
-      [queue_item1, queue_item2]
-    end
-
     context "With authenticated user" do
+      let(:video1) { Fabricate(:video) }
+      let(:video2) { Fabricate(:video) }
+      let(:queue_items) do
+        queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: user.queue_items.count + 1 )
+        queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: user.queue_items.count + 1 )
+        [queue_item1, queue_item2]
+      end
+
       before do
         set_current_user(user)
         get :index
@@ -30,12 +30,12 @@ describe QueueItemsController do
 
   describe 'POST create' do
     context "With authenticated user" do
-      let(:video1) { Fabricate(:video) }
       before do
         set_current_user(user)
       end
 
       context "With valid attributes" do      
+        let(:video1) { Fabricate(:video) }
         before do
           post :create, video_id: video1.id
         end
