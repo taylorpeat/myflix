@@ -8,3 +8,4 @@ def sign_in_user(user=Fabricate(:user))
   fill_in "Password", with: user.password
   click_button "Sign in"
 end
+
