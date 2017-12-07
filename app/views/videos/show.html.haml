@@ -1,5 +1,5 @@
 %article.video
-  .containerr
+  .container
     .row
       .video_large_cover.col-sm-7.col-sm-offset-1
         %img(src="http://dummyimage.com/665x375/000000/00a2ff")
@@ -42,6 +42,8 @@
             %li.row
               .col-sm-2
                 %span Rating: #{review.rating} / 5
-                %p by <a href="">#{review.user.full_name}</a>
+                %p
+                  by
+                  = link_to review.user.full_name, review.user
               .col-sm-8
                 %p= review.content
