@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :queue_items, -> { order(:position) }
   has_many :following_relationships, class_name: "Relationship", foreign_key: :follower_id
   has_many :leading_relationships, class_name: "Relationship", foreign_key: :leader_id
+  # has_many :leaders, through: :following_relationships
 
   has_secure_password
 
@@ -22,5 +23,9 @@ class User < ActiveRecord::Base
 
   def queued_video?(video)
     !!queue_items.find_by(video_id: video.id)
+  end
+
+  def follows?(leader)
+    .following_relationships.find_by(leader_id: leader.id)
   end
 end
