@@ -3,7 +3,8 @@ class User < ActiveRecord::Base
   has_many :queue_items, -> { order(:position) }
   has_many :following_relationships, class_name: "Relationship", foreign_key: :follower_id
   has_many :leading_relationships, class_name: "Relationship", foreign_key: :leader_id
-  # has_many :leaders, through: :following_relationships
+  has_many :followers, through: :following_relationships, class_name: "User", foreign_key: :follower_id
+  has_many :leaders, through: :following_relationships, class_name: "User", foreign_key: :leader_id
 
   has_secure_password
 
@@ -26,6 +27,6 @@ class User < ActiveRecord::Base
   end
 
   def follows?(leader)
-    .following_relationships.find_by(leader_id: leader.id)
+    !!self.following_relationships.find_by(leader_id: leader.id)
   end
 end
