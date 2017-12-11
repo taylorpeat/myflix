@@ -1,0 +1,3 @@
+class ResetPasswordsController < ApplicationController
+  
+end

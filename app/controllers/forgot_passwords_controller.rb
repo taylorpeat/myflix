@@ -1,9 +1,10 @@
 class ForgotPasswordsController < ApplicationController
   def create
     @user = User.find_by(email: params[:email])
+    
     if @user
       @user.generate_token
-      AppMailer.send_welcome_email(@user).deliver
+      AppMailer.send_password_reset_email(@user).deliver
       redirect_to forgot_password_confirmation_path
     else
       if params[:email].blank?
