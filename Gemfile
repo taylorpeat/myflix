@@ -24,6 +24,7 @@ group :development, :test do
   gem 'pry-nav'
   gem 'rspec-rails', '2.99'
   gem 'capybara'
+  gem 'capybara-email'
   gem 'launchy'
 end
 
