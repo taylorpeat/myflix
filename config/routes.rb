@@ -10,6 +10,7 @@ Myflix::Application.routes.draw do
   get 'my_queue', to: 'queue_items#index'
   post 'my_queue', to: 'queue_items#update'
   get 'people', to: 'relationships#index'
+  get 'forgot_password', to: 'forgot_passwords#new'
 
   resources :videos do
     collection do
@@ -23,4 +24,5 @@ Myflix::Application.routes.draw do
   resources :sessions, only: [:create]
   resources :queue_items, only: [:create, :destroy]
   resources :relationships, only: [:destroy, :create]
+  resources :forgot_passwords, only: [:create]
 end
