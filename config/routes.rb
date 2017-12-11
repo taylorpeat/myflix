@@ -26,5 +26,5 @@ Myflix::Application.routes.draw do
   resources :queue_items, only: [:create, :destroy]
   resources :relationships, only: [:destroy, :create]
   resources :forgot_passwords, only: [:create]
-  resources :reset_passwords, only: [:show, :create]
+  resources :reset_passwords, only: [:show, :create, :expired_token]
 end
