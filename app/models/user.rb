@@ -33,4 +33,12 @@ class User < ActiveRecord::Base
   def can_follow?(leader)
     self != leader && !self.follows?(leader)
   end
+
+  def generate_token
+    self.update_columns(token: SecureRandom.urlsafe_base64)
+  end
+
+  def clear_token
+    self.update_columns(token: nil)
+  end
 end

@@ -11,6 +11,7 @@ Myflix::Application.routes.draw do
   post 'my_queue', to: 'queue_items#update'
   get 'people', to: 'relationships#index'
   get 'forgot_password', to: 'forgot_passwords#new'
+  get 'forgot_password_confirmation', to: 'forgot_passwords#confirmation'
 
   resources :videos do
     collection do
