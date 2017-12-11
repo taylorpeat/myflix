@@ -1,6 +1,7 @@
 class ResetPasswordsController < ApplicationController
   def show
     @token = params[:id]
+    redirect_to expired_token_path unless User.find_by(token: @token)
   end
 
   def create
