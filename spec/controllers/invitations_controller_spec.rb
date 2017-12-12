@@ -16,7 +16,7 @@ describe InvitationsController do
 
   describe "POST create" do
     context "with valid inputs" do
-      after { ActionMailer::Base.deliveries = [] }
+      after { ActionMailer::Base.deliveries.clear }
 
       let(:user) { Fabricate(:user) }
 

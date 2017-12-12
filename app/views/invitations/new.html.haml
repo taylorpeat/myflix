@@ -19,7 +19,7 @@
             = f.label "Invitation Message"
             .row
               .col-sm-6
-                / = f.text_area :message, rows: 6, class: "form-control" do
-                /   Please join this really cool site!
+                = f.text_area :message, rows: 6, class: "form-control" do
+                  Please join this really cool site!
         %fieldset.form-group.action
-          = f.submit_tag "Send Invitation", class: "btn btn-default"
+          = f.submit "Send Invitation", class: "btn btn-default"

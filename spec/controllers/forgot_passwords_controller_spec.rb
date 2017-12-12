@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ForgotPasswordsController do
   describe "POST create" do
     context "with valid email" do
-      after { ActionMailer::Base.deliveries = [] }
+      after { ActionMailer::Base.deliveries.clear }
 
       it "redirects to forgot password confirmation" do
         user = Fabricate(:user)

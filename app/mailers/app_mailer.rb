@@ -10,7 +10,7 @@ class AppMailer < ActionMailer::Base
   end
 
   def send_invitation_email(invitation, user)
-    @token = invitation.token
+    @invitation = invitation
     @user = user
     mail to: invitation.recipient_email, from: "info@myflix.com", subject: "Invitation to MyFlix"
   end
