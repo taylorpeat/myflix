@@ -19,6 +19,7 @@ describe ResetPasswordsController do
   describe "POST create" do
     context "valid password" do
       let(:user) { Fabricate(:user, password: "password") }
+      
       before do
         user.generate_token
         post :create, password: "another_password", token: user.token

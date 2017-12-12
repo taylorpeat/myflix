@@ -3,6 +3,8 @@ require 'spec_helper'
 describe ForgotPasswordsController do
   describe "POST create" do
     context "with valid email" do
+      after { ActionMailer::Base.deliveries = [] }
+
       it "redirects to forgot password confirmation" do
         user = Fabricate(:user)
         post :create, email: user.email
@@ -12,7 +14,7 @@ describe ForgotPasswordsController do
       it "sends email" do
         user = Fabricate(:user)
         post :create, email: user.email
-        expect(ActionMailer::Base.deliveries.last.to).to eq([user.email])
+        expect(ActionMailer::Base.deliveries.first.to).to eq([user.email])
       end
 
       it "creates user token" do

@@ -28,4 +28,5 @@ Myflix::Application.routes.draw do
   resources :relationships, only: [:destroy, :create]
   resources :forgot_passwords, only: [:create]
   resources :reset_passwords, only: [:show, :create]
+  resources :invitations, only: [:new, :create]
 end
