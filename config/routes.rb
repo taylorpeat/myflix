@@ -13,7 +13,7 @@ Myflix::Application.routes.draw do
   get 'people', to: 'relationships#index'
   get 'forgot_password', to: 'forgot_passwords#new'
   get 'forgot_password_confirmation', to: 'forgot_passwords#confirmation'
-  get 'expired_token', to: 'reset_passwords#expired_token'
+  get 'expired_token', to: 'pages#expired_token'
 
   resources :videos do
     collection do
