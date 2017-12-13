@@ -41,4 +41,8 @@ class User < ActiveRecord::Base
   def clear_token
     self.update_columns(token: nil)
   end
+
+  def follow(another_user)
+    self.following_relationships.create(leader_id: another_user.id)
+  end
 end

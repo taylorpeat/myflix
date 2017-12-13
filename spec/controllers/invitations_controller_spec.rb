@@ -75,4 +75,12 @@ describe InvitationsController do
       let(:action) { post :create }
     end
   end
+
+  describe "GET show" do
+    it "sets @user with recipients email" do
+
+    end
+
+    it "redirects to expired token page for invalid token"
+  end
 end
