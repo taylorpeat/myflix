@@ -19,8 +19,10 @@ class UsersController < ApplicationController
         inviter = User.find(invitation.inviter_id)
         @user.follow(inviter)
         inviter.follow(@user)
+      else
+        session[:user_id] = @user.id
       end
-      session[:user_id] = @user.id
+      
       AppMailer.send_welcome_email(@user).deliver
       redirect_to videos_path
     else

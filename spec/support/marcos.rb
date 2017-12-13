@@ -9,3 +9,6 @@ def sign_in_user(user=Fabricate(:user))
   click_button "Sign in"
 end
 
+def sign_out_user
+  visit sign_out_path
+end
