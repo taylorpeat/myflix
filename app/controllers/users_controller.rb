@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_filter :require_not_signed_in, only: [:new, :new_with_token]
+
   def new
     @user = User.new
   end
@@ -23,7 +25,7 @@ class UsersController < ApplicationController
         session[:user_id] = @user.id
       end
       
-      AppMailer.send_welcome_email(@user).deliver
+      WelcomeEmailWorker.perform_async(@user.id)
       redirect_to videos_path
     else
       @invitation_token = invitation.token if invitation

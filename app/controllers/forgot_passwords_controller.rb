@@ -4,7 +4,7 @@ class ForgotPasswordsController < ApplicationController
     
     if @user
       @user.generate_token
-      AppMailer.send_password_reset_email(@user).deliver
+      PasswordResetEmailWorker.perform_async(@user.id)
       redirect_to forgot_password_confirmation_path
     else
       if params[:email].blank?

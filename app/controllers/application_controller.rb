@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
     redirect_to sign_in_path, notice: "You must be signed in to access that page." unless current_user
   end
 
+  def require_not_signed_in
+    redirect_to videos_path, notice: "You must be signed out to access that page." unless !current_user
+  end
+
   def current_user
     User.find(session[:user_id]) if session[:user_id]
   end

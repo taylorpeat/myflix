@@ -10,7 +10,7 @@ class InvitationsController < ApplicationController
     invitation = Invitation.new(invitation_params)
     
     if invitation.save
-      AppMailer.send_invitation_email(invitation, current_user).deliver
+      InvitationEmailWorker.perform_async(invitation.id, current_user.id)
       flash[:success] = "Your invitation has been sent."
     else
       flash[:error] = "Your invitation could not be sent."
