@@ -20,6 +20,8 @@ describe Admin::VideosController do
     end
     
     it "displays error message if not admin" do
+      set_current_user
+      get :new
       expect(flash[:notice]).to be_present
     end
 

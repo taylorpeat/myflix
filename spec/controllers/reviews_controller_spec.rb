@@ -45,7 +45,7 @@ describe ReviewsController do
         end
 
         it 'displays error message' do
-          expect(flash[:error]).not_to be_blank
+          expect(flash[:error]).to be_present
         end
 
         it 'refreshes page' do
