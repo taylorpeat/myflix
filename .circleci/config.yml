@@ -5,6 +5,7 @@ deployment:
   production:
     branch: master
     commands:
+      - git fetch --unshallow
       - heroku maintenance:on --app myflix-tpeat
       - heroku pg:backups capture --app myflix-tpeat
       - git push git@heroku.com:myflix-tpeat.git $CIRCLE_SHA1:refs/heads/master
@@ -13,6 +14,7 @@ deployment:
   staging:
     branch: staging
     commands:
+      - git fetch --unshallow
       - heroku maintenance:on --app myflix-staging-tpeat
       - git push git@heroku.com:myflix-staging-tpeat.git $CIRCLE_SHA1:refs/heads/master
       - heroku run rake db:migrate --app myflix-staging-tpeat
