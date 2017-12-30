@@ -1,8 +1,12 @@
 require 'spec_helper'
 
 describe Admin::VideosController do
-  describe "GET new"
+  describe "GET new" do
     it_behaves_like "require_sign_in" do
+      let(:action) { get :new }
+    end
+    
+    it_behaves_like "require_admin" do
       let(:action) { get :new }
     end
 
@@ -12,61 +16,64 @@ describe Admin::VideosController do
       expect(assigns(:video)).to be_instance_of(Video)
       expect(assigns(:video)).to be_new_record
     end
-
-    it "redirects to home page if not admin" do
-      set_current_user
-      get :new
-      expect(response).to redirect_to home_path
-    end
     
     it "displays error message if not admin" do
       set_current_user
       get :new
       expect(flash[:notice]).to be_present
     end
+  end
 
-  # describe "GET show" do
-  #   context 'authenticated user' do
-  #     let(:video) { Fabricate(:video) }
-  #     let(:reviews) do
-  #       review1 = Fabricate(:review, video: video)
-  #       review2 = Fabricate(:review, video: video)
-  #       [review1, review2]
-  #     end
+  describe "POST create" do
+    it_behaves_like "require_admin" do
+      let(:action) { get :new }
+    end
 
-  #     before do
-  #       set_current_user
-  #       get :show, id: video.id
-  #     end
+    context "with valid inputs" do
+      let(:category) { Fabricate(:category) }
       
-  #     it "sets @video" do
-  #       expect(assigns(:video)).to eq(video)
-  #     end
+      before do
+        set_current_admin
+        post :create, video: { title: "Star Wars", category_id: category.id, description: "Space fighting." }
+      end
 
-  #     it "sets @reviews" do
-  #       expect(assigns(:reviews)).to match_array(reviews)
-  #     end
+      it "creates a new video" do
+        expect(Video.count).to eq(1)
+      end
 
-  #     it 'displays reviews in reverse chronological order' do
-  #       expect(assigns(:reviews)).to eq(reviews.reverse)
-  #     end
-  #   end
+      it "redirects to new video page" do
+        expect(response).to redirect_to new_admin_video_path
+      end
 
+      it "displays success message" do
+        expect(flash[:success]).to be_present
+      end
+    end
 
-  # end
+    context "with invalid inputs" do
+      let(:category) { Fabricate(:category) }
 
-  # describe "POST search" do
-  #   it "sets @results for authenticated users" do
-  #     set_current_user
-  #     futurama = Fabricate(:video, title: "futurama")
-  #     back_to_the_future = Fabricate(:video, title: "back to the future")
-  #     superman = Fabricate(:video, title: "superman")
-  #     post :search, query: 'futur'
-  #     expect(assigns(:videos)).to eq([futurama, back_to_the_future])
-  #   end
-    
-  #   it_behaves_like "require_sign_in" do
-  #     let(:action) { post :search, query: 'futur' }
-  #   end
-  # end
+      before do
+        set_current_admin
+        post :create, video: { title: "", category_id: category.id, description: "Space fighting." }
+      end
+
+      it "doesn't create a new video" do
+        expect(Video.count).to eq(0)
+      end
+
+      it "renders new page" do
+        expect(response).to render_template :new
+      end
+
+      it "creates video instance variable" do
+        expect(assigns(:video)).to be_instance_of(Video)
+      end
+      
+      it "displays error message" do
+        expect(flash[:error]).to be_present
+      end
+    end
+
+  end
 end 
