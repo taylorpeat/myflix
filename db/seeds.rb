@@ -15,7 +15,7 @@ categories = [
 ]
 
 users = [
-  { email: 't@t.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Taylor Peat' }
+  { email: 't@t.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Taylor Peat', admin: true }
 ]
 
 
