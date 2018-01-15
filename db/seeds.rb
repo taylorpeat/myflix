@@ -2,10 +2,10 @@ require 'bcrypt'
 require 'faker'
 
 videos = [
-  { title: 'family_guy', rating: 4.5, category_id: 1 },
-  { title: 'futurama',   rating: 4.0, category_id: 1 },
-  { title: 'monk', rating: 3.0, category_id: 2 },
-  { title: 'south_park', rating: 3.5, category_id: 3 },
+  { title: 'Family Guy', rating: 4.5, category_id: 1 },
+  { title: 'Futurama',   rating: 4.0, category_id: 1 },
+  { title: 'Monk', rating: 3.0, category_id: 2 },
+  { title: 'South Park', rating: 3.5, category_id: 3 },
 ]
 
 categories = [
@@ -18,11 +18,13 @@ users = [
   { email: 't@t.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Taylor Peat', admin: true }
 ]
 
-
 Video.create(videos) do |video|
   video[:description] = 'Pizza boy Philip J. Fry awakens in the 31st century after 1,000 years of cryogenic preservation in this animated series. After he gets a job at an interplanetary delivery service, Fry embarks on ridiculous escapades to make sense of his predicament.'
-  video[:cover_image_url] = '/tmp/' + video[:title] + '.jpg'
+  binding.pry
+  video.small_cover = File.open(Rails.root.join("public/tmp/" + video.title.downcase.gsub(" ", "_") + ".jpg"))
+  video.large_cover = File.open(Rails.root.join("public/tmp/monk_large.jpg"))
 end
+
 
 Category.create(categories)
 
