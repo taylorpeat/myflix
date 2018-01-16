@@ -20,7 +20,6 @@ users = [
 
 Video.create(videos) do |video|
   video[:description] = 'Pizza boy Philip J. Fry awakens in the 31st century after 1,000 years of cryogenic preservation in this animated series. After he gets a job at an interplanetary delivery service, Fry embarks on ridiculous escapades to make sense of his predicament.'
-  binding.pry
   video.small_cover = File.open(Rails.root.join("public/tmp/" + video.title.downcase.gsub(" ", "_") + ".jpg"))
   video.large_cover = File.open(Rails.root.join("public/tmp/monk_large.jpg"))
 end
