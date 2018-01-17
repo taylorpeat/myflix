@@ -14,7 +14,19 @@ feature "admin adds new video" do
     fill_in "Description", with: "It's very real."
     attach_file "Large Cover", "spec/support/uploads/monk_large.jpg"
     attach_file "Small Cover", "spec/support/uploads/monk.jpg"
+    fill_in "Video URL", with: "http://www.example.com/video.mp4"
+    click_on("Add Video")
 
+    expect(page).to have_content("Real Show, was successfully created.")
+
+    sign_out_user
+    sign_in_user
+
+    visit video_path(Video.first)
+
+    expect(page).to have_content("Real Show")
+    expect(page).to have_selector(:css, 'video[poster$="monk_large.jpg"]')
+    expect(page).to have_selector(:css, 'a[href="http://www.example.com/video.mp4"]')
   end
 end
 
