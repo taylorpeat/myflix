@@ -15,8 +15,22 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     invitation = Invitation.find_by(token: params[:invitation_token]) 
-
+    Stripe.api_key = ENV["stripe_api_key"]
+    
     if @user.save
+
+      # Token is created using Checkout or Elements!
+      # Get the payment token ID submitted by the form:
+      token = params[:stripeToken]
+
+      # Charge the user's card:
+      charge = Stripe::Charge.create(
+        :amount => 999,
+        :currency => "cad",
+        :description => "Registration fee for #{@user.email}",
+        :source => token,
+      )
+
       if invitation
         inviter = User.find(invitation.inviter_id)
         @user.follow(inviter)
