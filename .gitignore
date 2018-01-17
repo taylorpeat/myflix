@@ -17,5 +17,8 @@
 # Ignore the database.yml file
 config/database.yml
 
-
+# Ignore uploads
 public/uploads
+
+# Ignore application configuration
+/config/application.yml

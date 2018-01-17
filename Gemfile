@@ -17,6 +17,8 @@ gem 'sidekiq', '4.2.10'
 gem 'carrierwave'
 gem 'carrierwave-aws'
 gem 'mini_magick'
+gem 'figaro'
+gem 'stripe'
 
 group :development do
   gem 'thin'
