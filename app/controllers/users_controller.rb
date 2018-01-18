@@ -16,6 +16,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     invitation = Invitation.find_by(token: params[:invitation_token]) 
     Stripe.api_key = ENV["stripe_api_key"]
+    binding.pry
     
     if @user.save
 

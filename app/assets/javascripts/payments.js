@@ -14,18 +14,10 @@ var card = elements.create('card', {style: style});
 $(function($) {
   card.mount('#card-element');
 
-  card.addEventListener('change', function(event) {
-  
-  var displayError = document.getElementById('card-errors');
-    if (event.error) {
-      displayError.textContent = event.error.message;
-    } else {
-      displayError.textContent = '';
-    }
-  });
-
   var form = document.getElementById('payment-form');
+
   form.addEventListener('submit', function(event) {
+    // $(form).find('button').prop('disabled', true)
     event.preventDefault();
 
     stripe.createToken(card).then(function(result) {
@@ -40,6 +32,15 @@ $(function($) {
     });
   });
 
+  card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
   function stripeTokenHandler(token) {
     // Insert the token ID into the form so it gets submitted to the server
     var form = document.getElementById('payment-form');
@@ -48,7 +49,8 @@ $(function($) {
     hiddenInput.setAttribute('name', 'stripeToken');
     hiddenInput.setAttribute('value', token.id);
     form.appendChild(hiddenInput);
-
+    
+    // $(form).find('button').prop('disabled', false);
     // Submit the form
     form.submit();
   }

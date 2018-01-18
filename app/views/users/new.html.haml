@@ -20,8 +20,9 @@
           .form-group
             %label.control-label.col-sm-3{ for: "card-element" } Payment Information
             .col-sm-5
+              #card-errors
               #card-element
         %fieldset.actions
           .form-group
             .col-sm-offset-3.col-sm-2
-              %input(type="submit" value="Sign Up" class="btn btn-default")
+              %button(class="btn btn-default") Sign Up
