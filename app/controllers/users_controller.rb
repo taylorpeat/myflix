@@ -40,6 +40,7 @@ class UsersController < ApplicationController
       end
       
       WelcomeEmailWorker.perform_async(@user.id)
+      flash[:success] = "Your account has been created."
       redirect_to videos_path
     else
       @invitation_token = invitation.token if invitation
