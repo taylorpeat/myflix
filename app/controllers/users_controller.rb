@@ -14,39 +14,27 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    invitation = Invitation.find_by(token: params[:invitation_token]) 
+    @invitation_token = params[:invitation_token]
     Stripe.api_key = ENV["stripe_api_key"]
-    binding.pry
     
-    if @user.save
-
-      # Token is created using Checkout or Elements!
-      # Get the payment token ID submitted by the form:
+    if @user.valid?
       token = params[:stripeToken]
 
-      # Charge the user's card:
-      charge = Stripe::Charge.create(
-        :amount => 999,
-        :currency => "cad",
-        :description => "Registration fee for #{@user.email}",
-        :source => token,
-      )
+      begin
+        charge = Stripe::Charge.create(
+          :amount => 999,
+          :currency => "cad",
+          :description => "Registration fee for #{@user.email}",
+          :source => token,
+        )
 
-      if invitation
-        inviter = User.find(invitation.inviter_id)
-        @user.follow(inviter)
-        inviter.follow(@user)
-      else
-        session[:user_id] = @user.id
+        handle_success
+      rescue Stripe::CardError => e
+        @card_error = e.json_body[:error][:message]
+        handle_error
       end
-      
-      WelcomeEmailWorker.perform_async(@user.id)
-      flash[:success] = "Your account has been created."
-      redirect_to videos_path
     else
-      @invitation_token = invitation.token if invitation
-      flash[:error] = "The account could not be created."
-      render :new
+      handle_error
     end
   end
 
@@ -56,5 +44,30 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:email, :full_name, :password)
+  end
+
+  def handle_invitation
+    invitation = Invitation.find_by(token: params[:invitation_token]) 
+
+    if invitation
+      inviter = User.find(invitation.inviter_id)
+      @user.follow(inviter)
+      inviter.follow(@user)
+    else
+      session[:user_id] = @user.id
+    end
+  end
+
+  def handle_success
+    @user.save
+    WelcomeEmailWorker.perform_async(@user.id)
+    session[:user_id] = @user.id
+    flash[:success] = "Your account has been created."
+    redirect_to videos_path
+  end
+
+  def handle_error
+    flash[:error] = "The account could not be created."
+    render :new
   end
 end

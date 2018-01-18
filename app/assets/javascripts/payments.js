@@ -12,9 +12,23 @@ var card = elements.create('card', {style: style});
 
 // Add an instance of the card Element into the `card-element` <div>
 $(function($) {
-  card.mount('#card-element');
-
   var form = document.getElementById('payment-form');
+
+  var stripeTokenHandler = function(token) {
+    // Insert the token ID into the form so it gets submitted to the server
+    var form = document.getElementById('payment-form');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', 'stripeToken');
+    hiddenInput.setAttribute('value', token.id);
+    form.appendChild(hiddenInput);
+    
+    // $(form).find('button').prop('disabled', false);
+    // Submit the form
+    form.submit();
+  }
+  
+  card.mount('#card-element');
 
   form.addEventListener('submit', function(event) {
     // $(form).find('button').prop('disabled', true)
@@ -40,18 +54,4 @@ $(function($) {
       displayError.textContent = '';
     }
   });
-
-  function stripeTokenHandler(token) {
-    // Insert the token ID into the form so it gets submitted to the server
-    var form = document.getElementById('payment-form');
-    var hiddenInput = document.createElement('input');
-    hiddenInput.setAttribute('type', 'hidden');
-    hiddenInput.setAttribute('name', 'stripeToken');
-    hiddenInput.setAttribute('value', token.id);
-    form.appendChild(hiddenInput);
-    
-    // $(form).find('button').prop('disabled', false);
-    // Submit the form
-    form.submit();
-  }
 });
