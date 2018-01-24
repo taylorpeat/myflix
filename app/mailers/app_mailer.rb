@@ -1,17 +1,25 @@
 class AppMailer < ActionMailer::Base
   def send_welcome_email(user)
     @user = user
-    mail to: @user.email, from: "info@myflix.com", subject: "Welcome to Myflix!"
+    mail to: select_email, from: "info@myflix.com", subject: "Welcome to Myflix!"
   end
 
   def send_password_reset_email(user)
     @token = user.token
-    mail to: user.email, from: "info@myflix.com", subject: "MyFlix Password Reset"
+    mail to: select_email, from: "info@myflix.com", subject: "MyFlix Password Reset"
   end
 
   def send_invitation_email(invitation, user)
     @invitation = invitation
     @user = user
-    mail to: invitation.recipient_email, from: "info@myflix.com", subject: "Invitation to MyFlix"
+    mail to: select_email(@invitation), from: "info@myflix.com", subject: "Invitation to MyFlix"
+  end
+
+  private
+
+  def select_email(invitation)
+    return "taylorpeat@hotmail.com" if Env.staging?
+    return invitation.recipient_email if invitation
+    @user.email
   end
 end
