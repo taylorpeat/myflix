@@ -3,6 +3,8 @@ class LargeCoverUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   include CarrierWave::MiniMagick
+  attr_accessor :remote_large_cover_url
+
 
   # Choose what kind of storage to use for this uploader:
   # storage :file

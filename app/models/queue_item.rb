@@ -3,7 +3,7 @@ class QueueItem < ActiveRecord::Base
   belongs_to :user
 
   validates_presence_of :user_id, :video_id
-  validates_uniqueness_of :video_id
+  validates_uniqueness_of :video_id, scope: :user_id
   validates_numericality_of :position
 
   def rating

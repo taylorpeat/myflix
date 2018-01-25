@@ -1,5 +1,8 @@
-.videos.row
-  - @videos.each do |video|
-    .video.col-sm-2
-      = link_to video, nil do
-        = image_tag video.small_cover_url.to_s
+%article.video_category
+  %header
+    %h3= "Videos matching \"#{@search_term}\""
+  .videos.row
+    - @videos.each do |video|
+      .video.col-sm-2
+        = link_to video, nil do
+          = image_tag video.small_cover_url.to_s

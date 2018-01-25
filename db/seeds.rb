@@ -2,10 +2,20 @@ require 'bcrypt'
 require 'faker'
 
 videos = [
-  { title: 'Family Guy', rating: 4.5, category_id: 1, video_url: "https://n2158.thevideo.me:8777/trcgnjj6723hu37wrbood5ctgecesdacf2qjovrdhtv4c2pcpyvo7typv6ze5o2qroxhulz3swwhwxfzbcnhuxqqm3aw3k3jvbshkps6udgdpfgqg7k6rnlxywiao5ypotrv345dlnlqn5l3lvj72b2roozq6owj3jmz7564jvyz63q2j2iiq72vlfsusg7nhv4o3bu2oqjjnc5cb45sqx5fdgiuvsujwkoirvthpw7dnouxacc7iayomhpyewgryaewbciiiczhyrciph5gqviexl5q/v.mp4?direct=false&ua=1&vt=gx52xe24tfjhaclroka4h4badnfjxkkh66h4ihtsbungafn6icz5xuw3vi62eqq6f55cybgskiphhlxtxfw5tzi6ab7u2kqrujhzzntkodi4kyfgkbm6am776dqh5txlwwdkh32twqyh3qfu2tlcmz7ow766loysni73czhacyrskthe5mlutsuh7snmv3unetzc7i3ixaljcubilbltlktzp3o4apck7nsclqh6okxy4y2l2xmdsfmxl6xr5sefkuo7myounptisitmlwyssftxfm" },
-  { title: 'Futurama',   rating: 4.0, category_id: 1, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/videoplayback.3gp" },
-  { title: 'Monk', rating: 3.0, category_id: 2, video_url: "https://n2741.thevideo.me:8777/tzcgm2gbbg3hu37wrbq6pkaqf5krhfgy2c6v2feihpa4cl45xk7o2wyxwpoqkmlavequ26nu4mhdyxdna3ywbpsph7k5g7aiv6i2o7imgxurcye6am6knyvvrkw2zfqjpz5lpioik5dm3hgl6hlxyokqtdmd4w2lal3x4k6wpztlynnjjctlsie4l4aoj2rpoozrg2zb2c3l5nld6ercrxczpfvtr5owl4plm4sejy3c6vp4zkgq5tdiispo5hnynx4nybbafqb2evoushub75a6r5fq/v.mp4?direct=false&ua=1&vt=ng4llha2yfidggdcplomh4cz7mcm2adsthxedagsinh2ygpnccgfhjkzafqqxukq6c2cam2xv23rzevt5lab3ontgien7g4gxtxlpmybvyqtjuft2jmsywfkxe4xnyzgxazn5rtva2lx6pa64msem4kdn4nmzzatx6gtmelcvwj2hjw2t2plobyq5eoamwwyllnk6tddcgfq447aw4cp7ykb6t4jqyhd4p622tx2qllkjlrkjkxeftu5aog7wp6ur5bgwawbngkvz5bieujb3sueby" },
-  { title: 'South Park', rating: 3.5, category_id: 3, video_url: "https://n5587.thevideo.me:8777/ojcgnibylc3hu37wrd36372ugfru6w3dph3lsaujmconb4ioupq5dpdzzubfoygp2qlxo6law6hglmihy7ffvygso73esad4pqfwndn64niekpsh7dj2aequrd75ccdodc4m457mqyxbowl56l7263jixlclfoup2jnjzxfbn4m5nyn6ey6if5usmevsy4qjbrfqr3tmd737apv2svh4bh7kty2yi6s5ptuf2hrzgulk7nuryunhgudomrkpwa7bp7b3hgwpkhh4k3vxzzptpvs5isua/v.mp4?direct=false&ua=1&vt=h36kxsc63vlgmhdpf6n4h4bbwv6hrozreqiitrn7lnvvylsuwg2i7bsrwqv3lrwinmpgvgezczati7ouonop6zgu7dh4odw2h5wc3stje7qqyuonbolrsdqs5ucahw3ieyzbywujioguscrvt2j7bcr43w6lasvlazbgc6d77rlrzv2yypeenvvhwwn2g2ox44xyxyhr4nrpb2n4cypk5d45aucos6yga3xpishisq763v7x6thlbuzcqocsmoqocx6ksls25djrirpy3uqwk32osi" },
+  { title: 'Breaking Bad', category_id: 2, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Breaking_Bad.mp4", description: "A high-school chemistry teacher learns he's dying, so he takes up a new career as a meth producer in hopes of earning enough money to take care of his family." },
+  { title: 'Brooklyn Nine-Nine', category_id: 1, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Brooklyn_Nine-Nine.mp4", description: "A sitcom following the lives of a group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss." },
+  { title: 'Family Guy', category_id: 1, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Family+Guy.mp4", description: "Animated antics of the constantly grousing Griffins, a family that put some fun in dysfunctional. While dad Peter is a tad dim and lazy, mum Lois is none of the above. Then there are hapless teens Meg and Chris; sassy baby Stewie, who's wise (and a wise guy) beyond his years; and family dog Brian, who might be the smartest of the lot." },
+  { title: 'Futurama', category_id: 1, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Futurama.mp4", description: "Sharply satiric animation about a man from 1999 who thaws out on the eve of the 31st century. An Emmy-winning work cocreated by Matt Groening (`The Simpsons'), it had a `thaw' of its own, of sorts, after it ended its five-year Fox run, during which time it was too often pre-empted by pro-football overruns. After it left the network, however, the irreverent `Futurama' demonstrated that it still had a future, scoring big in cable reruns and DVD sales." },
+  { title: 'Game of Thrones', category_id: 2, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Game_of_Thrones.mp4", description: "An adaptation of author George R.R. Martin's \"A Song of Ice and Fire\" medieval fantasies about power struggles among the Seven Kingdoms of Westeros." },
+  { title: "Grey's Anatomy", category_id: 2, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Grey's_Anatomy.mp4", description: "Doctors at a Seattle teaching hospital hone their bedside manners on and off the job in this medical drama." },
+  { title: 'Justified', category_id: 2, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Justified.mp4", description: "A maverick U.S marshal enforces the law his way in his Kentucky hometown." },
+  { title: 'Kitchen Nightmares', category_id: 3, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Kitchen_Nightmares.mp4", description: "A reality series following chef Gordon Ramsay's attempts to turn around troubled restaurants. Based on the popular British show." },
+  { title: 'Modern Family', category_id: 1, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Modern_Family.mp4", description: "A mockumentary-style sitcom chronicling the unusual kinship of the extended Pritchett clan, a brood that includes patriarch Jay; his younger Latina wife, Gloria, and her son; Jay's daughter, Claire, and her family; and Jay's son, Mitchell, who lives with his partner, Cameron.
+" },
+  { title: 'Monk', category_id: 2, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Monk.mp4", description: "An ex-cop suffering from obsessive-compulsive disorder solves crimes with various (and usually exasperated) sidekicks in tow in this first-rate mystery with a breakout Emmy-winning star in Tony Shalhoub. The 'defective detective' may have an abundance of phobias (heights, crowds, and even milk, among them), but he also has razor-sharp deductive skills, which he uses to help the San Francisco police with especially baffling cases." },
+  { title: 'Stranger Things', category_id: 2, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Stranger_Things.mp4", description: "A love letter to the '80s classics that captivated a generation, Stranger Things is set in 1983 Indiana, where a young boy vanishes into thin air. As friends, family and local police search for answers, they are drawn into an extraordinary mystery involving top-secret government experiments, terrifying supernatural forces and one very strange little girl." },
+  { title: 'Survivor', category_id: 3, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/Survivor.mp4", description: "Eighteen castaways compete with and against loved ones in a \"Blood vs. Water\" style competition that reintroduces Exile Island to the game." },
+  { title: 'The Office', category_id: 1, video_url: "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/video/The_Office.mp4", description: "Based on the award-winning British comedy of the same name, this acclaimed sitcom is told through the lenses of a documentary film crew and filled with gossip, pranks, romance and general foolishness at Dunder-Mifflin Paper Co. in Scranton, Pennsylvania. If you've ever hated your boss, your job or both, then you'll love this show." },
 ]
 
 categories = [
@@ -15,25 +25,38 @@ categories = [
 ]
 
 users = [
-  { email: 't@t.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Taylor Peat', admin: true }
+  { email: 'admin@example.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Admin User', admin: true },
+  { email: 'arnold@example.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Arnold Hobbs' },
+  { email: 'bill@example.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Bill Gates' },
+  { email: 'charles@example.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Charlie Kettle' },
+  { email: 'doug@example.com', password_digest: "$2a$04$jt9w7m/FbKm7YkjUiuboyOUHxvLwUR9lOfwJaToLoKoIUHwc4wJ3S", full_name: 'Douglas Davies' },
 ]
 
-Video.create(videos) do |video|
-  video[:description] = 'Pizza boy Philip J. Fry awakens in the 31st century after 1,000 years of cryogenic preservation in this animated series. After he gets a job at an interplanetary delivery service, Fry embarks on ridiculous escapades to make sense of his predicament.'
-  video.small_cover = File.open(Rails.root.join("public/tmp/" + video.title.downcase.gsub(" ", "_") + ".jpg"))
-  video.large_cover = File.open(Rails.root.join("public/tmp/monk_large.jpg"))
+videos.each do |video|
+  video[:remote_small_cover_url] = "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/small_cover/" + video[:title].downcase.gsub(" ", "_").delete("'") + ".jpg"
+  video[:remote_large_cover_url] = "https://s3.us-east-2.amazonaws.com/myflix-staging-tpeat/uploads/video/large_cover/" + video[:title].downcase.gsub(" ", "_").delete("'") + "_large" + ".jpg"
 end
+
+Video.create(videos)
 
 
 Category.create(categories)
 
 User.create(users)
 
-reviews = [
-  { rating: 5, content: Faker::Lorem.paragraph(3), user_id: User.first.id, video_id: Video.first.id },
-  { rating: 2, content: Faker::Lorem.paragraph(3), user_id: User.first.id, video_id: Video.first.id },
-  { rating: 3, content: Faker::Lorem.paragraph(3), user_id: User.first.id, video_id: Video.second.id },
-]
+reviews = []
+
+User.all.each do |user|
+  video_ids = Video.all.pluck('id')
+  
+  video_ids.sample(6).each do |video_id|
+    reviews << { rating: [1,1.5,2,2.5,3,3.5,4,4.5,5].sample, content: Faker::Lorem.paragraph(3), user_id: user.id, video_id: video_id }
+  end
+
+  video_ids.sample([1,2,3,4].sample).each_with_index do |video_id, idx|
+    user.queue_items.create({ video_id: video_id, position: idx })
+  end
+end
 
 Review.create(reviews)
 
