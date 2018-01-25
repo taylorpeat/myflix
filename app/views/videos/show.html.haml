@@ -6,7 +6,7 @@
         = video_tag @video.video_url, size: "665x375", poster: @video.large_cover_url.to_s, controls: true
       .video_info.col-sm-3
         %header
-          %h3= @video.title.titleize
+          %h3= @video.title
           - if @video.rating == nil
             %span= "Rating: Not reviewed"
           - else
