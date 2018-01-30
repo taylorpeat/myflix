@@ -20,19 +20,9 @@ class UsersController < ApplicationController
     if @user.valid?
       token = params[:stripeToken]
 
-      begin
-        charge = Stripe::Charge.create(
-          :amount => 999,
-          :currency => "cad",
-          :description => "Registration fee for #{@user.email}",
-          :source => token,
-        )
+      response = StripeWrapper::Charge.create( amount: 999, desciption: "Registration fee for #{@user.email}", source: token)
+      response.successful? handle_success : handle_error(response)
 
-        handle_success
-      rescue Stripe::CardError => e
-        @card_error = e.json_body[:error][:message]
-        handle_error
-      end
     else
       handle_error
     end
@@ -66,8 +56,9 @@ class UsersController < ApplicationController
     redirect_to videos_path
   end
 
-  def handle_error
-    flash[:error] = "The account could not be created."
+  def handle_error(response=nil)
+    flash[:error] = "The account could not be created"
+    flash[:error] += "because #{response.error_message}" if response
     render :new
   end
 end

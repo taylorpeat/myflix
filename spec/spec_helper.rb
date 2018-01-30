@@ -6,6 +6,7 @@ require 'rspec/autorun'
 require 'capybara/email/rspec'
 require 'database_cleaner'
 require 'sidekiq/testing'
+require 'vcr'
 
 Sidekiq::Testing.inline!
 
@@ -21,6 +22,12 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
+
+VCR.configure do |config|
+  config.cassette_library_dir = "fixtures/vcr_cassettes"
+  config.hook_into :webmock # or :fakeweb
+end
+
 
 RSpec.configure do |config|
   # ## Mock Framework
