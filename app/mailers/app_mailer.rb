@@ -5,6 +5,7 @@ class AppMailer < ActionMailer::Base
   end
 
   def send_password_reset_email(user)
+    @user = user
     @token = user.token
     mail to: select_email, from: "info@myflix.com", subject: "MyFlix Password Reset"
   end
@@ -17,8 +18,8 @@ class AppMailer < ActionMailer::Base
 
   private
 
-  def select_email(invitation)
-    return "taylorpeat@hotmail.com" if Env.staging?
+  def select_email(invitation=nil)
+    return "taylorpeat@hotmail.com" if Rails.env.staging?
     return invitation.recipient_email if invitation
     @user.email
   end
