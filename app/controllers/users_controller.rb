@@ -42,14 +42,13 @@ class UsersController < ApplicationController
       inviter = User.find(invitation.inviter_id)
       @user.follow(inviter)
       inviter.follow(@user)
-    else
-      session[:user_id] = @user.id
     end
   end
 
   def handle_success
     @user.save
     WelcomeEmailWorker.perform_async(@user.id)
+    handle_invitation
     session[:user_id] = @user.id
     flash[:success] = "Your account has been created."
     redirect_to videos_path

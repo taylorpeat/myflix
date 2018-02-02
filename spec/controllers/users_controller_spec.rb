@@ -34,9 +34,14 @@ describe UsersController do
 
   describe "POST create" do
     after { ActionMailer::Base.deliveries.clear }
+    before do
+      response = double
+      response.stub(:successful?) { true }
+      StripeWrapper::Charge.stub(:create) { response }
+    end
     
     context "with valid input" do
-      before do 
+      before do
         post :create, user: Fabricate.attributes_for(:user)
       end
       
