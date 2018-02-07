@@ -29,15 +29,13 @@ feature 'User invites friend' do
     open_email "bob@example.com"
     current_email.click_link "Accept the invitation"
     fill_in "Password", with: "password"
-    find('[name=cardnumber]').set("4242424242424242")
-    find('[name=exp-date]').set("‎01 / 22")
-    find('[name=cvc]').set("‎123")
-    find('[name=postal]').set("‎12345")
+    within_frame(find('#card-element iframe')) do
+      find_field('cardnumber').set("4242424242424242")
+      find_field('exp-date').set("‎01 / 22")
+      find_field('cvc').set("‎123")
+      find_field('postal').set("‎12345")
+    end
     click_button "Sign Up"
-
-    fill_in "Email Address", with: "bob@example.com"
-    fill_in "Password", with: "password"
-    click_button "Sign in"
   end
 
   def friend_should_follow_inviter(inviter)

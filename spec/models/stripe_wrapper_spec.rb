@@ -18,7 +18,7 @@ describe StripeWrapper do
         response = StripeWrapper::Charge.create(
           amount: 999,
           description: "Test",
-          token: token
+          source: token
         )
 
         expect(response.amount).to eq(999)

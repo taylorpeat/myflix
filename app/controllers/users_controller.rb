@@ -21,7 +21,7 @@ class UsersController < ApplicationController
       token = params[:stripeToken]
 
       response = StripeWrapper::Charge.create( amount: 999, desciption: "Registration fee for #{@user.email}", source: token)
-      response.successful? ? handle_success : handle_error(response)
+      response.status == "succeeded" ? handle_success : handle_error(response)
     else
       handle_error
     end

@@ -6,7 +6,7 @@ module StripeWrapper
           :amount => options[:amount],
           :currency => "cad",
           :description => options[:description],
-          :source => options[:token],
+          :source => options[:source],
         )
       rescue Stripe::CardError => e
         response = e

@@ -36,7 +36,7 @@ describe UsersController do
     after { ActionMailer::Base.deliveries.clear }
     before do
       response = double
-      response.stub(:successful?) { true }
+      response.stub(:status) { "succeeded" }
       StripeWrapper::Charge.stub(:create) { response }
     end
     

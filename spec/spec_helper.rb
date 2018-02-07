@@ -29,6 +29,7 @@ VCR.configure do |config|
   config.ignore_localhost = true
 end
 
+Capybara.server_port = 52662
 
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -37,6 +38,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean
   end
  
   config.before(:each) do
