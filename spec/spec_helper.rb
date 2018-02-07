@@ -29,6 +29,11 @@ VCR.configure do |config|
   config.ignore_localhost = true
 end
 
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, :browser => :chrome)
+end
+
+Capybara.javascript_driver = :chrome
 Capybara.server_port = 52662
 
 RSpec.configure do |config|
