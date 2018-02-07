@@ -24,25 +24,35 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 VCR.configure do |config|
-  config.cassette_library_dir = "fixtures/vcr_cassettes"
+  config.cassette_library_dir = "spec/cassettes"
   config.hook_into :webmock
+  config.ignore_localhost = true
 end
 
 
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
   end
-
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
+ 
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+ 
+  config.before(:each, :js => true) do
+    DatabaseCleaner.strategy = :truncation
+  end
+ 
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+ 
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 
   config.infer_base_class_for_anonymous_controllers = false

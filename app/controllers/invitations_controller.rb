@@ -8,8 +8,8 @@ class InvitationsController < ApplicationController
 
   def create
     invitation = Invitation.new(invitation_params)
-    
     if invitation.save
+      binding.pry
       InvitationEmailWorker.perform_async(invitation.id, current_user.id)
       flash[:success] = "Your invitation has been sent."
     else
